@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>文字上滚</title>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <style>
+    *{margin:0;padding:0;font-size:12px;}
+    li{list-style:none;}
+    .box{margin:20px;width:320px;height:195px;border:1px solid #ddd;padding:5px 5px 10px;overflow:hidden;}
+    .box ul li{line-height:25px;
+        width: 100%;
+        height: 30px;
+        background: pink;
+        margin: 10px 0;
+        border-radius: 20px;
+    }
+    </style>
+</head>
+<body>
+<div class="box">
+    <ul>
+        <li>01这是一个无缝向上滚动的特效</li>
+        <li>02这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>03这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>04这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>05这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>06这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>07这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>08这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+        <li>09这是一个无缝向上滚动的特效，是我第一次写这样的插件</li>
+    </ul>
+</div>
+<script>
+    (function($){
+        $.fn.textSlider = function(options){
+            var defaults = { //初始化参数
+                scrollHeight:10,
+                line:1,
+                speed:'normal',
+                timer:2000
+            };
+            var opts = $.extend(defaults,options);
+            this.each(function(){
+                var timerID;
+                var obj = $(this);
+                var $ul = obj.children("ul");
+                var $height = $ul.find("li").height();
+                var $Upheight = 0-opts.line*$height;
+                obj.hover(function(){
+                    clearInterval(timerID);
+                },function(){
+                    timerID = setInterval(moveUp,opts.timer);
+                });
+                function moveUp(){
+                    $ul.animate({"margin-top":$Upheight},opts.speed,function(){
+                        for(i=0;i<opts.line;i++){ //只有for循环了才可以设置一次滚动的行数
+                            $ul.find("li:first").appendTo($ul);
+                        }
+                        $ul.css("margin-top",0);
+                    });
+                }
+                timerID = setInterval(moveUp,opts.timer);
+                // timerID=setTimeout(moveUp,opts.timer);
+            });
+        };
+    })(jQuery)
+</script>
+<script>
+    $(function(){
+        $(".box").textSlider({
+            line:1
+        });
+    })
+</script>
+</body>
+</html>
